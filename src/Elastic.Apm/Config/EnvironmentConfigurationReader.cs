@@ -9,7 +9,7 @@ namespace Elastic.Apm.Config
 		internal const string Origin = "environment";
 
 
-		public EnvironmentConfigurationReader(AbstractLogger logger = null) : base(logger) { }
+		public EnvironmentConfigurationReader(IApmLogger logger = null) : base(logger) { }
 
 		public LogLevel LogLevel => ParseLogLevel(Read(ConfigConsts.ConfigKeys.Level));
 

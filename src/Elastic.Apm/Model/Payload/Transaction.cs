@@ -14,7 +14,7 @@ namespace Elastic.Apm.Model.Payload
 {
 	internal class Transaction : ITransaction
 	{
-		private readonly AbstractLogger _logger;
+		private readonly ScopedLogger _logger;
 		private readonly IPayloadSender _sender;
 		internal readonly DateTimeOffset Start;
 
@@ -23,9 +23,9 @@ namespace Elastic.Apm.Model.Payload
 		public Transaction(IApmAgent agent, string name, string type)
 			: this(agent.Logger, name, type, agent.PayloadSender) { }
 
-		public Transaction(AbstractLogger logger, string name, string type, IPayloadSender sender)
+		public Transaction(IApmLogger logger, string name, string type, IPayloadSender sender)
 		{
-			_logger = logger;
+			_logger = logger?.Scoped(nameof(Transaction));
 			_sender = sender;
 			Start = DateTimeOffset.UtcNow;
 			Name = name;

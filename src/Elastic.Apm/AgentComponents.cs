@@ -9,7 +9,7 @@ namespace Elastic.Apm
 	public class AgentComponents : IApmAgent
 	{
 		public AgentComponents(
-			AbstractLogger logger = null,
+			IApmLogger logger = null,
 			IConfigurationReader configurationReader = null,
 			Service service = null,
 			IPayloadSender payloadSender = null)
@@ -22,7 +22,7 @@ namespace Elastic.Apm
 			TransactionContainer = new TransactionContainer();
 		}
 
-		public AbstractLogger Logger { get; }
+		public IApmLogger Logger { get; }
 
 		public IPayloadSender PayloadSender { get; }
 

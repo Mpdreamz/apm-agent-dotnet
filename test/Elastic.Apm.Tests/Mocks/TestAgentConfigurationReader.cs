@@ -14,7 +14,7 @@ namespace Elastic.Apm.Tests.Mocks
 		private readonly string _serviceName;
 
 		public TestAgentConfigurationReader(
-			AbstractLogger logger,
+			IApmLogger logger,
 			string serverUrls = null,
 			string logLevel = "Debug",
 			string serviceName = null
@@ -26,7 +26,7 @@ namespace Elastic.Apm.Tests.Mocks
 			_serviceName = serviceName;
 		}
 
-		public new AbstractLogger Logger { get; }
+		public new IApmLogger Logger { get; }
 
 		public LogLevel LogLevel => ParseLogLevel(Kv(ConfigConsts.ConfigKeys.Level, _logLevel, Origin));
 		public IReadOnlyList<Uri> ServerUrls => ParseServerUrls(Kv(ConfigConsts.ConfigKeys.Urls, _serverUrls, Origin));

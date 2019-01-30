@@ -21,7 +21,7 @@ namespace Elastic.Apm.Report
 	/// </summary>
 	internal class PayloadSender : IDisposable, IPayloadSender
 	{
-		private readonly AbstractLogger _logger;
+		private readonly ScopedLogger _logger;
 
 		private readonly HttpClient _httpClient;
 
@@ -31,9 +31,9 @@ namespace Elastic.Apm.Report
 
 		static PayloadSender() => ServicePointManager.DnsRefreshTimeout = DnsTimeout;
 
-		internal PayloadSender(AbstractLogger logger, IConfigurationReader configurationReader)
+		internal PayloadSender(IApmLogger logger, IConfigurationReader configurationReader)
 		{
-			_logger = logger;
+			_logger = logger?.Scoped(nameof(PayloadSender));
 			_settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
 
 			var serverUrlBase = configurationReader.ServerUrls.First();
@@ -90,12 +90,12 @@ namespace Elastic.Apm.Report
 					switch (item)
 					{
 						case Payload p:
-							_logger.LogWarning($"Failed sending transaction {p.Transactions.FirstOrDefault()?.Name}");
-							_logger.LogDebug($"{e.GetType().Name}: {e.Message}");
+							_logger.LogWarning(nameof(PayloadSender), "Failed sending transaction {TransactionName}", p.Transactions.FirstOrDefault()?.Name);
+							_logger.LogDebugException(e);
 							break;
 						case Error err:
-							_logger.LogWarning($"Failed sending Error {err.Errors[0]?.Id}");
-							_logger.LogDebug($"{e.GetType().Name}: {e.Message}");
+							_logger.LogWarning(nameof(PayloadSender), "Failed sending Error {ErrorId}", err.Errors[0]?.Id);
+							_logger.LogDebugException(e);
 							break;
 					}
 				}

@@ -19,7 +19,7 @@ namespace Elastic.Apm.Tests.Mocks
 				serverUrls: serverUrls
 			), service, payloadSender) { }
 
-		public TestAgentComponents(AbstractLogger logger, string serverUrls = null, Service service = null,
+		public TestAgentComponents(TestLogger logger, string serverUrls = null, Service service = null,
 			IPayloadSender payloadSender = null
 		)
 			: this(new TestAgentConfigurationReader(logger,

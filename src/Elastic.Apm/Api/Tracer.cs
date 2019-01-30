@@ -13,13 +13,13 @@ namespace Elastic.Apm.Api
 	{
 		public ITransaction CurrentTransaction => Agent.TransactionContainer.Transactions.Value;
 
-		private readonly AbstractLogger _logger;
+		private readonly ScopedLogger _logger;
 		private readonly Service _service;
 		private readonly IPayloadSender _sender;
 
-		public Tracer(AbstractLogger logger, Service service, IPayloadSender payloadSender)
+		public Tracer(IApmLogger logger, Service service, IPayloadSender payloadSender)
 		{
-			_logger = logger;
+			_logger = logger?.Scoped(nameof(Tracer));
 			_service = service;
 			_sender = payloadSender;
 		}
